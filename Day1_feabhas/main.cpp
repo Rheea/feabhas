@@ -11,11 +11,12 @@ using namespace std;
 //auto global_auto{2};
 //static auto global_auto_const {4.9};
 
-ostream& operator<<(ostream& os, Alarm& alarm)
-{
-   os << alarm.as_string();
-   return os;
-}
+//namespace Things{
+// enum value = {a, b, c, d};
+//}
+//Things::value t {Things::a};
+
+
 
 int main()
 {
@@ -41,6 +42,8 @@ int main()
 
     a1.print_state();
     a2.print_state();
+
+
 
     cout<< "a1: " << a1.as_string() << endl;
     cout<< "a2: " << a2.as_string() << endl;
