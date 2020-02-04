@@ -12,14 +12,13 @@ class Pipe
 {
 public:
     Pipe()=default;
-//    using elem_type = Alarm; // typedef Alarm elem_type
 
     void push(const elem_type& in);
     std::optional<elem_type> pull();
     bool is_empty() const;
 
 private:
-    optional<elem_type> pipe_alarm;
+    optional<elem_type> pipe_alarm {};
     bool has_data {false};
 
 };

@@ -1,7 +1,7 @@
 #ifndef GENERATOR_H
 #define GENERATOR_H
 #include"pipe.h"
-
+#include<time.h>
 
 class Generator
 {

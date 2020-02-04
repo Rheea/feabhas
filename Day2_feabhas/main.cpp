@@ -1,5 +1,4 @@
 #include <iostream>
-#include "alarm.h"
 #include "pipe.h"
 #include "generator.h"
 #include "display.h"
@@ -16,11 +15,10 @@ int main()
     Pipe pipe {};
 
     connect(generator, pipe);
-    connect(display, pipe);
-
     generator.execute();
+    connect(display, pipe);
     display.execute();
 
-    cout << "Done Day 2!" << endl;
+    cout << "Done !" << endl;
     return 0;
 }

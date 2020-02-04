@@ -1,7 +1,6 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 #include"pipe.h"
-//#include"alarm.h"
 
 class Display
 {
