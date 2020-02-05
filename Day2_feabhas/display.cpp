@@ -5,7 +5,7 @@ void Display::execute(){
     {
         auto my_text = my_pipe->pull();
         my_text->print_state();
-        cout << "Pipe not emptyt!" << endl;
+        cout << "Pipe not empty!" << endl;
 
     }
     else {
@@ -15,5 +15,5 @@ void Display::execute(){
 
 void connect(Display& disp, Pipe& pip) {
     disp.my_pipe = &pip;
-    cout << "Addr of pipe in display: " << &pip << endl;
+//    cout << "Addr of pipe in display: " << &pip << endl;
 }
