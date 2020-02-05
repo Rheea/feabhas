@@ -15,5 +15,4 @@ void Display::execute(){
 
 void connect(Display& disp, Pipe& pip) {
     disp.my_pipe = &pip;
-//    cout << "Addr of pipe in display: " << &pip << endl;
 }

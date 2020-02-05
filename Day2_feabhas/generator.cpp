@@ -13,7 +13,6 @@ void Generator::execute()
 
 void connect(Generator& gen, Pipe& pip) {
     gen.my_pipe = &pip;
-//    cout << "Addr of pipe in generator: " << &pip << endl;
 }
 
 
