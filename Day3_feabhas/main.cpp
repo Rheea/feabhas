@@ -2,10 +2,9 @@
 #include "pipe.h"
 #include "generator.h"
 #include "display.h"
-
+#include "pipeline.h"
 
 using namespace std;
-
 
 
 int main()
@@ -14,10 +13,14 @@ int main()
     Display display {};
     Pipe pipe {};
 
+    Pipeline pipeline {};
+
     connect(generator, pipe);
-    generator.execute();
     connect(display, pipe);
-    display.execute();
+
+    pipeline.add(generator);
+    pipeline.add(display);
+    pipeline.run();
 
     cout << "Done !" << endl;
     return 0;
