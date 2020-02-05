@@ -9,7 +9,6 @@ class Display : public Filter
 public:
     Display()=default;
     friend void connect(Display& disp, Pipe& pip);
-//    void execute();
 
 private:
     Pipe* my_pipe {nullptr};

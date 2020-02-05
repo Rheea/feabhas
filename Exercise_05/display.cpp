@@ -3,13 +3,18 @@
 void Display::execute(){
     if (my_pipe->is_empty() == false)
     {
-        auto my_text = my_pipe->pull();
-        my_text->print_state();
-        cout << "Pipe not empty!" << endl;
-
+        //go through alarm_list and print them out
+//        auto my_text = my_pipe->pull();
+//        my_text->print_state();
+        cout << "Display::Alarm" << endl;
+        auto local_alarm_list = my_pipe->pull();
+        for(IteratorA i=local_alarm_list->begin(); i!=local_alarm_list->end(); i++){
+            i->print_state();
+        }
+        cout <<endl;
     }
     else {
-        cout << "Pipe is empty!" << endl;
+        cout << "Display::Pipe is empty!" << endl;
     }
 }
 
