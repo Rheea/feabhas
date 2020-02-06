@@ -1,5 +1,4 @@
 #include "display.h"
-#include"alarm_list.h"
 
 void Display::execute(){
     if (my_pipe->is_empty() == false)

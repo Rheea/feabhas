@@ -2,6 +2,7 @@
 #define ALARM_LIST_H
 #include"alarm.h"
 #include"filter.h"
+#include<array>
 #include<vector>
 
 //why it doesn't see IteratorA if def inside public of class Alarm_list
@@ -14,15 +15,13 @@ class Alarm_list
 {
 public:
 
-//    using ContainerA = std::vector<Alarm>;
-//    using IteratorA  = ContainerA::iterator;
-//    using value_typeA = ContainerA::value_type;
-//    using size_typeA  = ContainerA::size_type;
 
     Alarm_list() = default;
 
     void add(Alarm& in_val);
     void emplace(Alarm::Type type);
+    void emplace(Alarm::Type type,const char* desc);
+
     std::size_t size() const;
 
     IteratorA begin();
