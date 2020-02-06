@@ -14,28 +14,32 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#include "generator.h"
+#include <iostream>
+#include <cassert>
 #include "display.h"
-#include "alarm_filter.h"
 #include "pipe.h"
-#include "pipeline.h"
+
+using namespace std;
 
 
-int main()
+void Display::execute()
 {
-    Generator    generator { };
-    Display      display   { };
-    Alarm_filter filter    { Alarm::advisory};
-    Pipe         pipe1     { };
-    Pipe         pipe2     { };   
+    assert(input);
+    if (input->is_empty()) return;
+    
+    cout << "DISPLAY   : ----------------------------------" << endl;
 
-    connect(generator, pipe1);
-    connect(filter, pipe1, pipe2);
-    connect(display, pipe2);
+    auto alarms = input->pull();
 
-    Pipeline pipeline { };
-    pipeline.add(generator);
-    pipeline.add(filter);
-    pipeline.add(display);
-    pipeline.run();
+    for (auto& alarm : alarms) {
+        cout << alarm << endl;
+    }
+    
+    cout << endl;
+}
+
+
+void connect(Display& display, Pipe& pipe)
+{
+    display.input = &pipe;
 }

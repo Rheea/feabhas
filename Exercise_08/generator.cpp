@@ -14,28 +14,61 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
+#include <iostream>
+#include <cassert>
 #include "generator.h"
-#include "display.h"
-#include "alarm_filter.h"
 #include "pipe.h"
-#include "pipeline.h"
+
+using namespace std;
+
+namespace {
+
+    Alarm::Type random_alarm()
+    {
+        return (static_cast<Alarm::Type>((rand() % 3) + 1));
+    }
 
 
-int main()
+    const char* alarm_strings[] {
+        "Panic!",
+        "Run away!",
+        "Ignore this alarm.",
+        "Oooops!",
+        "Things are going horribly wrong.",
+        "Please fix immediately."
+    };
+
+    const char* random_string()
+    {
+        return (alarm_strings[rand() % 6]);
+    }
+}
+
+
+void Generator::execute()
 {
-    Generator    generator { };
-    Display      display   { };
-    Alarm_filter filter    { Alarm::advisory};
-    Pipe         pipe1     { };
-    Pipe         pipe2     { };   
+    assert(output);
+    
+    cout << "GENERATOR : ----------------------------------" << endl;
 
-    connect(generator, pipe1);
-    connect(filter, pipe1, pipe2);
-    connect(display, pipe2);
+    Alarm_list alarms { };
 
-    Pipeline pipeline { };
-    pipeline.add(generator);
-    pipeline.add(filter);
-    pipeline.add(display);
-    pipeline.run();
+    auto num_alarms = rand() % 10;
+    cout << "Generating " << num_alarms << " alarm" << (num_alarms != 1 ? "s" : "") << endl;
+
+    alarms.reserve(num_alarms);
+    
+    for (int i { 0 }; i < num_alarms; ++i) {
+        alarms.emplace(random_alarm(), random_string());
+    }
+
+    output->push(alarms);
+
+    cout << endl;
+}
+
+
+void connect(Generator& gen, Pipe& pipe)
+{
+    gen.output = &pipe;
 }

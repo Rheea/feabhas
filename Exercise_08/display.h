@@ -17,7 +17,7 @@
 #ifndef DISPLAY_H_
 #define DISPLAY_H_
 
-#include "Filter.h"
+#include "filter.h"
 
 class Pipe;
 

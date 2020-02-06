@@ -14,42 +14,53 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#include <algorithm>
+#include <iostream>
 #include <cassert>
-#include "Alarm_filter.h"
-#include "Pipe.h"
+#include "generator.h"
+#include "pipe.h"
 
 using namespace std;
 
-Alarm_filter::Alarm_filter(Alarm::Type remove_this) :
-    value { remove_this }
-{
+namespace {
+
+    Alarm::Type random_alarm()
+    {
+        return (static_cast<Alarm::Type>((rand() % 3) + 1));
+    }
+
+
+    const char* alarm_strings[] {
+        "Panic!",
+        "Run away!",
+        "Ignore this alarm.",
+        "Oooops!",
+        "Things are going horribly wrong.",
+        "Please fix immediately."
+    };
+
+    const char* random_string()
+    {
+        return (alarm_strings[rand() % 6]);
+    }
 }
 
 
-void Alarm_filter::execute()
+void Generator::execute()
 {
-    assert(input);
     assert(output);
-    if (input->is_empty()) return;
-
-    cout << "ALARM FILTER : -------------------------------" << endl;
-
-    auto alarms = input->pull();
-
-    auto original_size = alarms.size();
-
-    auto it = remove_if(
-        begin(alarms), 
-        end(alarms), 
-        [this](const Alarm& alarm) { return alarm.type() == value; }
-    );
-    alarms.erase(it, end(alarms));
     
-    auto elements_removed = original_size - alarms.size();
-    cout << "Removing " << elements_removed;
-    cout << " alarm" << (elements_removed != 1 ? "s" : "");
-    cout << endl;
+    cout << "GENERATOR : ----------------------------------" << endl;
+
+    Alarm_list alarms { };
+
+    auto num_alarms = rand() % 10;
+    cout << "Generating " << num_alarms << " alarm" << (num_alarms != 1 ? "s" : "") << endl;
+
+    alarms.reserve(num_alarms);
+    
+    for (int i { 0 }; i < num_alarms; ++i) {
+        alarms.emplace(random_alarm(), random_string());
+    }
 
     output->push(alarms);
 
@@ -57,8 +68,7 @@ void Alarm_filter::execute()
 }
 
 
-void connect(Alarm_filter& filter, Pipe& in, Pipe& out)
+void connect(Generator& gen, Pipe& pipe)
 {
-    filter.input  = &in;
-    filter.output = &out;
+    gen.output = &pipe;
 }

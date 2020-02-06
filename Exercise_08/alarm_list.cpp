@@ -14,28 +14,51 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#include "generator.h"
-#include "display.h"
-#include "alarm_filter.h"
-#include "pipe.h"
-#include "pipeline.h"
+#include "alarm_list.h"
 
-
-int main()
+void Alarm_list::add(Alarm& in_val)
 {
-    Generator    generator { };
-    Display      display   { };
-    Alarm_filter filter    { Alarm::advisory};
-    Pipe         pipe1     { };
-    Pipe         pipe2     { };   
+    alarms.push_back(in_val);
+}
 
-    connect(generator, pipe1);
-    connect(filter, pipe1, pipe2);
-    connect(display, pipe2);
 
-    Pipeline pipeline { };
-    pipeline.add(generator);
-    pipeline.add(filter);
-    pipeline.add(display);
-    pipeline.run();
+void Alarm_list::emplace(Alarm::Type type)
+{
+    alarms.emplace_back(type);
+}
+
+
+void Alarm_list::emplace(Alarm::Type type, const char* str)
+{
+    alarms.emplace_back(type, str);
+}
+
+
+Alarm_list::size_type Alarm_list::size() const
+{
+    return alarms.size();
+}
+    
+
+Alarm_list::Iterator Alarm_list::begin()
+{
+    return alarms.begin();
+}
+
+
+Alarm_list::Iterator Alarm_list::end()
+{
+    return alarms.end();
+}
+
+
+void Alarm_list::erase(const Alarm_list::Iterator& from, const Alarm_list::Iterator& to)
+{
+    alarms.erase(from, to);
+}
+
+
+void Alarm_list::reserve(Alarm_list::size_type num_elements)
+{
+    alarms.reserve(num_elements);
 }

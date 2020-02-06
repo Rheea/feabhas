@@ -14,28 +14,27 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#include "generator.h"
-#include "display.h"
-#include "alarm_filter.h"
-#include "pipe.h"
-#include "pipeline.h"
+#ifndef ALARM_FILTER_H_
+#define ALARM_FILTER_H_
+
+#include "filter.h"
+#include "alarm.h"
+
+class Pipe;
 
 
-int main()
-{
-    Generator    generator { };
-    Display      display   { };
-    Alarm_filter filter    { Alarm::advisory};
-    Pipe         pipe1     { };
-    Pipe         pipe2     { };   
+class Alarm_filter : public Filter {
+public:
+    Alarm_filter(Alarm::Type remove_this);
 
-    connect(generator, pipe1);
-    connect(filter, pipe1, pipe2);
-    connect(display, pipe2);
+    void execute() override;
 
-    Pipeline pipeline { };
-    pipeline.add(generator);
-    pipeline.add(filter);
-    pipeline.add(display);
-    pipeline.run();
-}
+private:
+    Alarm::Type value;
+
+    Pipe* input  { nullptr };
+    Pipe* output { nullptr };
+    friend void connect(Alarm_filter& filter, Pipe& in, Pipe& out);
+};
+
+#endif

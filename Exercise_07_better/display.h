@@ -14,27 +14,20 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#ifndef ALARM_FILTER_H_
-#define ALARM_FILTER_H_
+#ifndef DISPLAY_H_
+#define DISPLAY_H_
 
-#include "Filter.h"
-#include "Alarm.h"
+#include "filter.h"
 
 class Pipe;
 
-
-class Alarm_filter : public Filter {
+class Display : public Filter {
 public:
-    Alarm_filter(Alarm::Type remove_this);
-
     void execute() override;
 
 private:
-    Alarm::Type value;
-
-    Pipe* input  { nullptr };
-    Pipe* output { nullptr };
-    friend void connect(Alarm_filter& filter, Pipe& in, Pipe& out);
+    Pipe* input { nullptr };
+    friend void connect(Display& display, Pipe& pipe);
 };
 
 #endif

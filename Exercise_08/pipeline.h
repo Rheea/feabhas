@@ -14,20 +14,25 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#ifndef GENERATOR_H_
-#define GENERATOR_H_
+#ifndef PIPELINE_H_
+#define PIPELINE_H_
 
-#include "Filter.h"
+#include <array>
 
-class Pipe;
+class Filter;
 
-class Generator : public Filter {
+
+class Pipeline {
 public:
-    void execute() override;
+    bool add(Filter& filter);
+    void run();
 
 private:
-    Pipe* output { nullptr };
-    friend void connect(Generator& gen, Pipe& pipe);
+    using Container = std::array<Filter*, 4>;
+    using Iterator  = Container::iterator;
+
+    Container filters { };
+    Iterator  next    { std::begin(filters) };
 };
 
 #endif

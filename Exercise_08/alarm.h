@@ -14,28 +14,36 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#include "generator.h"
-#include "display.h"
-#include "alarm_filter.h"
-#include "pipe.h"
-#include "pipeline.h"
+#ifndef ALARM_H_
+#define ALARM_H_
+
+#include <iostream>
 
 
-int main()
-{
-    Generator    generator { };
-    Display      display   { };
-    Alarm_filter filter    { Alarm::advisory};
-    Pipe         pipe1     { };
-    Pipe         pipe2     { };   
+class Alarm {
+public:
+    enum Type { invalid, advisory, caution, warning };
 
-    connect(generator, pipe1);
-    connect(filter, pipe1, pipe2);
-    connect(display, pipe2);
+    Alarm();
+    ~Alarm();
+    Alarm(Type alarm_init);
+    Alarm(Type alarm_init, const char* str);
 
-    Pipeline pipeline { };
-    pipeline.add(generator);
-    pipeline.add(filter);
-    pipeline.add(display);
-    pipeline.run();
-}
+    Alarm(const Alarm& rhs);
+    Alarm& operator=(Alarm rhs);
+    friend void swap(Alarm& lhs, Alarm& rhs);
+
+    const char* as_string() const;
+    const char* what() const;
+    Type type() const;
+
+private:
+    Type  value { Type::invalid };
+    char* description { nullptr };
+};
+
+
+std::ostream& operator<<(std::ostream& os, const Alarm& alarm);
+
+
+#endif

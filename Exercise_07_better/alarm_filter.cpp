@@ -14,53 +14,42 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#include <iostream>
+#include <algorithm>
 #include <cassert>
-#include "Generator.h"
-#include "Pipe.h"
+#include "alarm_filter.h"
+#include "pipe.h"
 
 using namespace std;
 
-namespace {
-
-    Alarm::Type random_alarm()
-    {
-        return (static_cast<Alarm::Type>((rand() % 3) + 1));
-    }
-
-
-    const char* alarm_strings[] {
-        "Panic!",
-        "Run away!",
-        "Ignore this alarm.",
-        "Oooops!",
-        "Things are going horribly wrong.",
-        "Please fix immediately."
-    };
-
-    const char* random_string()
-    {
-        return (alarm_strings[rand() % 6]);
-    }
+Alarm_filter::Alarm_filter(Alarm::Type remove_this) :
+    value { remove_this }
+{
 }
 
 
-void Generator::execute()
+void Alarm_filter::execute()
 {
+    assert(input);
     assert(output);
+    if (input->is_empty()) return;
+
+    cout << "ALARM FILTER : -------------------------------" << endl;
+
+    auto alarms = input->pull();
+
+    auto original_size = alarms.size();
+
+    auto it = remove_if(
+        begin(alarms), 
+        end(alarms), 
+        [this](const Alarm& alarm) { return alarm.type() == value; }
+    );
+    alarms.erase(it, end(alarms));
     
-    cout << "GENERATOR : ----------------------------------" << endl;
-
-    Alarm_list alarms { };
-
-    auto num_alarms = rand() % 10;
-    cout << "Generating " << num_alarms << " alarm" << (num_alarms != 1 ? "s" : "") << endl;
-
-    alarms.reserve(num_alarms);
-    
-    for (int i { 0 }; i < num_alarms; ++i) {
-        alarms.emplace(random_alarm(), random_string());
-    }
+    auto elements_removed = original_size - alarms.size();
+    cout << "Removing " << elements_removed;
+    cout << " alarm" << (elements_removed != 1 ? "s" : "");
+    cout << endl;
 
     output->push(alarms);
 
@@ -68,7 +57,8 @@ void Generator::execute()
 }
 
 
-void connect(Generator& gen, Pipe& pipe)
+void connect(Alarm_filter& filter, Pipe& in, Pipe& out)
 {
-    gen.output = &pipe;
+    filter.input  = &in;
+    filter.output = &out;
 }

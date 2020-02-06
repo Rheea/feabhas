@@ -14,24 +14,25 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#ifndef PIPE_H_
-#define PIPE_H_
+#ifndef PIPELINE_H_
+#define PIPELINE_H_
 
-#include "Alarm_list.h"
+#include <array>
+
+class Filter;
 
 
-class Pipe {
+class Pipeline {
 public:
-    using elem_type = Alarm_list;
-
-    void      push(const elem_type& in);
-    elem_type pull();
-    bool      is_empty() const;
+    bool add(Filter& filter);
+    void run();
 
 private:
-    elem_type element { };
-    bool      empty   { true };
-};
+    using Container = std::array<Filter*, 4>;
+    using Iterator  = Container::iterator;
 
+    Container filters { };
+    Iterator  next    { std::begin(filters) };
+};
 
 #endif

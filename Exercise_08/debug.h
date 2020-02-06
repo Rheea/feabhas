@@ -14,32 +14,14 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#include <iostream>
-#include <cassert>
-#include "Display.h"
-#include "Pipe.h"
+#ifndef TRACE_DEBUG_H_
+#define TRACE_DEBUG_H_
 
-using namespace std;
+#ifdef TRACE_ENABLED
+    #include <iostream>
+    #define TRACE(msg) std::cout << "DEBUG : " << msg << std::endl
+#else
+    #define TRACE(msg)
+#endif
 
-
-void Display::execute()
-{
-    assert(input);
-    if (input->is_empty()) return;
-    
-    cout << "DISPLAY   : ----------------------------------" << endl;
-
-    auto alarms = input->pull();
-
-    for (auto& alarm : alarms) {
-        cout << alarm << endl;
-    }
-    
-    cout << endl;
-}
-
-
-void connect(Display& display, Pipe& pipe)
-{
-    display.input = &pipe;
-}
+#endif

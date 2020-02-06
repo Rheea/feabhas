@@ -15,7 +15,7 @@
 // -----------------------------------------------------------------------------
 
 #include <cstring>
-#include "Alarm.h"
+#include "alarm.h"
 #include "debug.h"
 
 using namespace std;

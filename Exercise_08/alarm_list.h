@@ -14,31 +14,31 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#include "Pipe.h"
-#include "debug.h"
+#ifndef ALARM_LIST_H_
+#define ALARM_LIST_H_
 
-using namespace std;
-
-
-void Pipe::push(const Pipe::elem_type& in)
-{
-  // Copy the elem_type.
-  //
-  TRACE("Pipe::push");
-  element = in;
-  empty   = false;
-}
+#include <vector>
+#include "alarm.h"
 
 
-Pipe::elem_type Pipe::pull()
-{
-    TRACE("Pipe::pull");
-    empty = true;
-	return element;
-}
+class Alarm_list {
+public:
+    using Container  = std::vector<Alarm>;
+    using Iterator   = Container::iterator;
+    using value_type = Container::value_type;
+    using size_type  = Container::size_type;
 
+    void      reserve(size_type num_elements);
+    void      add(Alarm& in_val);
+    void      emplace(Alarm::Type type);
+    void      emplace(Alarm::Type type, const char* str);
+    void      erase(const Iterator& from, const Iterator& to);
+    size_type size() const;
+    Iterator  begin();
+    Iterator  end();
 
-bool Pipe::is_empty() const
-{
-    return empty;
-}
+private:
+    Container alarms { };
+};
+
+#endif

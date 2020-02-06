@@ -14,29 +14,31 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#include "Pipeline.h"
-#include "Filter.h"
+#ifndef ALARM_LIST_H_
+#define ALARM_LIST_H_
 
-using namespace std;
-
-
-bool Pipeline::add(Filter& filter)
-{
-    if (next == end(filters)) return false;
-
-    *next = &filter;
-    ++next;
-    return true;
-}
+#include <vector>
+#include "alarm.h"
 
 
-void Pipeline::run()
-{
-    for (int i { 0 }; i < 10; ++i ) {
-        for (auto& filter_ptr : filters) {
-            if (filter_ptr) {
-                filter_ptr->execute();
-            }
-        }
-    }
-}
+class Alarm_list {
+public:
+    using Container  = std::vector<Alarm>;
+    using Iterator   = Container::iterator;
+    using value_type = Container::value_type;
+    using size_type  = Container::size_type;
+
+    void      reserve(size_type num_elements);
+    void      add(Alarm& in_val);
+    void      emplace(Alarm::Type type);
+    void      emplace(Alarm::Type type, const char* str);
+    void      erase(const Iterator& from, const Iterator& to);
+    size_type size() const;
+    Iterator  begin();
+    Iterator  end();
+
+private:
+    Container alarms { };
+};
+
+#endif

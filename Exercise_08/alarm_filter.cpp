@@ -14,51 +14,51 @@
 // services that may be provided by Feabhas.
 // -----------------------------------------------------------------------------
 
-#include "Alarm_list.h"
+#include <algorithm>
+#include <cassert>
+#include "alarm_filter.h"
+#include "pipe.h"
 
-void Alarm_list::add(Alarm& in_val)
+using namespace std;
+
+Alarm_filter::Alarm_filter(Alarm::Type remove_this) :
+    value { remove_this }
 {
-    alarms.push_back(in_val);
 }
 
 
-void Alarm_list::emplace(Alarm::Type type)
+void Alarm_filter::execute()
 {
-    alarms.emplace_back(type);
-}
+    assert(input);
+    assert(output);
+    if (input->is_empty()) return;
 
+    cout << "ALARM FILTER : -------------------------------" << endl;
 
-void Alarm_list::emplace(Alarm::Type type, const char* str)
-{
-    alarms.emplace_back(type, str);
-}
+    auto alarms = input->pull();
 
+    auto original_size = alarms.size();
 
-Alarm_list::size_type Alarm_list::size() const
-{
-    return alarms.size();
-}
+    auto it = remove_if(
+        begin(alarms), 
+        end(alarms), 
+        [this](const Alarm& alarm) { return alarm.type() == value; }
+    );
+    alarms.erase(it, end(alarms));
     
+    auto elements_removed = original_size - alarms.size();
+    cout << "Removing " << elements_removed;
+    cout << " alarm" << (elements_removed != 1 ? "s" : "");
+    cout << endl;
 
-Alarm_list::Iterator Alarm_list::begin()
-{
-    return alarms.begin();
+    output->push(alarms);
+
+    cout << endl;
 }
 
 
-Alarm_list::Iterator Alarm_list::end()
+void connect(Alarm_filter& filter, Pipe& in, Pipe& out)
 {
-    return alarms.end();
-}
-
-
-void Alarm_list::erase(const Alarm_list::Iterator& from, const Alarm_list::Iterator& to)
-{
-    alarms.erase(from, to);
-}
-
-
-void Alarm_list::reserve(Alarm_list::size_type num_elements)
-{
-    alarms.reserve(num_elements);
+    filter.input  = &in;
+    filter.output = &out;
 }
