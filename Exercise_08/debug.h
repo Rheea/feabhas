@@ -16,7 +16,7 @@
 
 #ifndef TRACE_DEBUG_H_
 #define TRACE_DEBUG_H_
-
+#define TRACE_ENABLED
 #ifdef TRACE_ENABLED
     #include <iostream>
     #define TRACE(msg) std::cout << "DEBUG : " << msg << std::endl

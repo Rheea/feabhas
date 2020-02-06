@@ -51,7 +51,7 @@ void Alarm_filter::execute()
     cout << " alarm" << (elements_removed != 1 ? "s" : "");
     cout << endl;
 
-    output->push(alarms);
+    output->push(std::move(alarms));
 
     cout << endl;
 }

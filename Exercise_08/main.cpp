@@ -19,7 +19,11 @@
 #include "alarm_filter.h"
 #include "pipe.h"
 #include "pipeline.h"
+//#include "debug.h"
 
+//#define TRACE_ENABLED 1
+//#include <iostream>
+//#define TRACE(msg) std::cout << "DEBUG : " << msg << std::endl
 
 int main()
 {

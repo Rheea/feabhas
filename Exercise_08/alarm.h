@@ -30,6 +30,8 @@ public:
     Alarm(Type alarm_init, const char* str);
 
     Alarm(const Alarm& rhs);
+    Alarm(Alarm&& rhs) noexcept;
+
     Alarm& operator=(Alarm rhs);
     friend void swap(Alarm& lhs, Alarm& rhs);
 
@@ -40,6 +42,7 @@ public:
 private:
     Type  value { Type::invalid };
     char* description { nullptr };
+
 };
 
 

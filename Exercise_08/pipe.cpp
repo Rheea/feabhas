@@ -29,6 +29,14 @@ void Pipe::push(const Pipe::elem_type& in)
   empty   = false;
 }
 
+void Pipe::push(const Pipe::elem_type&& in)
+{
+  // Copy the elem_type using move_semantics
+  //
+  TRACE("Pipe::push::move_semantics");
+  element = in;
+  empty   = false;
+}
 
 Pipe::elem_type Pipe::pull()
 {

@@ -58,6 +58,12 @@ Alarm::Alarm(const Alarm& rhs) :
     TRACE("Alarm copy ctor");
 }
 
+Alarm::Alarm(Alarm&& rhs) noexcept : Alarm {}
+{
+    swap(*this, rhs);
+    TRACE("Alarm move ctor");
+
+}
 
 Alarm& Alarm::operator=(Alarm rhs)
 {

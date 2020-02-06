@@ -25,6 +25,8 @@ public:
     using elem_type = Alarm_list;
 
     void      push(const elem_type& in);
+    void      push(const elem_type&& in);
+
     elem_type pull();
     bool      is_empty() const;
 
