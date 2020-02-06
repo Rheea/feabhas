@@ -40,6 +40,11 @@ void Alarm::print_state()
     cout << this->alarm << endl;
 }
 
+Alarm::Type Alarm::type() const
+{
+    return alarm;
+}
+
 ostream& operator<<(ostream& os, Alarm& alarm)
 {
    os << alarm.as_string();

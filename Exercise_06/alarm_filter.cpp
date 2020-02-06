@@ -1,33 +1,37 @@
 #include "alarm_filter.h"
 
+Alarm_filter::Alarm_filter(Alarm::Type remove_filt_value) :
+    filter_value { remove_filt_value }
+{
+}
+
+
 void Alarm_filter::execute()
 {
     // the simple way
     if (my_pipe_in->is_empty() == false) {
         cout << "Alarm_filter filtering" << endl;
-        auto local_alarm_list_in = my_pipe_in->pull();
-        Alarm_list local_alarm_list_out {};
-        for(IteratorA i=local_alarm_list_in->begin(); i!=local_alarm_list_in->end(); i++){
-            if (strcmp(i->as_string(),"warning")==0) {
-                local_alarm_list_out.add(*i);
-            }
-        }
-        my_pipe_out->push(local_alarm_list_out);
+        auto local_alarm_list = my_pipe_in->pull();
+        auto original_size = local_alarm_list.size();
 
-        //now as a lambda expression
-        //local_alarm_list_in = alarm_opt
-        //local_alarm_list_out = copy_if output
-//        if (auto local_alarm_list_in = my_pipe_in->pull(); local_alarm_list_in.has_value()) {
-//            auto src {local_alarm_list_in.value()};
-//            decltype (src) dest {};
+        auto it = remove_if(
+             begin(local_alarm_list),
+             end(local_alarm_list),
+                    [this](const Alarm& alarm) {return alarm.type() == filter_value;}
+        );
+        local_alarm_list.erase(it, end(local_alarm_list));
 
-//        copy_if(begin(src),
-//                end(src),
-//                back_inserter(dest),
-//                [this](const Alarm &alarm){return alarm.type() == filter_value;});
+        auto elements_removed = original_size - local_alarm_list.size();
+        cout << "Removing " << elements_removed;
+        cout << " alarm" << (elements_removed != 1 ? "s" : "");
+        cout << endl;
 
-//    }
+        my_pipe_out->push(local_alarm_list);
+
+        cout << endl;
     }
+
+
     else {
         cout << "Alarm_filter::Pipe is empty!" << endl;
     }

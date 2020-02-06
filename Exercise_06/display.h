@@ -3,6 +3,7 @@
 #include"pipe.h"
 #include"filter.h"
 
+class Pipe;
 
 class Display : public Filter
 {

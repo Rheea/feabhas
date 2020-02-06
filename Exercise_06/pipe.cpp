@@ -3,14 +3,12 @@
 
 void Pipe::push(const elem_type& in){
     //how to exactly push in here
-    this->pipe_alarm_list.emplace(in);
-    if (this->pipe_alarm_list->size()>0){
-        this->has_data = true;
-    }
+    pipe_alarm_list=in;
+    has_data = true;
     cout << "Pipe::push" << endl;
 }
 
-std::optional<elem_type> Pipe::pull(){
+elem_type Pipe::pull(){
     if (has_data) {
         has_data = false;
         return pipe_alarm_list;

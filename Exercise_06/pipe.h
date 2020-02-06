@@ -15,11 +15,11 @@ public:
     Pipe()=default;
 
     void push(const elem_type& in);
-    std::optional<elem_type> pull();
+    elem_type pull();
     bool is_empty() const;
 
 private:
-    optional<elem_type> pipe_alarm_list {};
+    elem_type pipe_alarm_list {};
     bool has_data {false};
 
 };

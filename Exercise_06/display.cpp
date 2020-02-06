@@ -8,7 +8,7 @@ void Display::execute(){
 //        my_text->print_state();
         cout << "Display::Alarm" << endl;
         auto local_alarm_list = my_pipe->pull();
-        for(IteratorA i=local_alarm_list->begin(); i!=local_alarm_list->end(); i++){
+        for(IteratorA i=local_alarm_list.begin(); i!=local_alarm_list.end(); i++){
             i->print_state();
         }
         cout <<endl;

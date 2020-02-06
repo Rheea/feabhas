@@ -5,19 +5,20 @@
 #include <string.h>
 #include <algorithm>
 
+class Pipe;
+
 class Alarm_filter : public Filter
 {
 public:
 //    using Predicate = std::function<bool(const Alarm&)>;
     Alarm_filter() = default;
-    friend void connect(Alarm_filter& alm_filt, Pipe& pipIN, Pipe& pipOUT);
+    Alarm_filter(Alarm::Type remove_filt_value);
 
 private:
     Pipe* my_pipe_in {nullptr};
     Pipe* my_pipe_out {nullptr};
     Alarm::Type filter_value {};
-
-//    Predicate predicate {};
+    friend void connect(Alarm_filter& alm_filt, Pipe& pipIN, Pipe& pipOUT);
 
 protected:
     void execute() override;
